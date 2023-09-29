@@ -54,6 +54,22 @@ export class CircleShapeImpl {
 }
 ```
 
+The impl decorator can take in multiple traits:
+```typescript
+@impl(Shape, Printable).for(Circle)
+export class CircleShapeImpl {
+  radius!: number;
+
+  area() {
+    return Math.PI * this.radius ** 2;
+  }
+
+  print() {
+    console.log(`Area: ${this.area()}`);
+  }
+}
+```
+
 The following example shows how to use the `CircleShapeImpl` class to print a circle to the console:
 
 ```typescript
@@ -125,7 +141,7 @@ export class ShapePrintableImpl {
   }
 }
 
-// Generated code, this will go in a different file
+// Generated code, this will go in a different file and will be imported
 export interface Circle extends Shape {}
 export interface CircleShapeImpl extends Circle {}
 export interface ShapePrintableImpl extends Shape, Printable {}
@@ -151,7 +167,6 @@ ShapePrintableImpl.use = function (f) {
   // @ts-ignore ["we bend it to our will"](https://twitter.com/techsavvytravvy/status/1707418798838423679)
   delete Circle.prototype.print;
 };
-
 // Generated code end
 
 CircleShapeImpl.use(() => {
