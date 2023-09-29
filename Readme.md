@@ -100,4 +100,68 @@ ShapePrintableImpl.use = function (f) {
 };
 ```
 
+The final output could look like this:
+
+```typescript
+export class Shape {
+  area!: () => number;
+}
+
+export class Circle {
+  radius!: number;
+}
+export class CircleShapeImpl {
+  area() {
+    return Math.PI * this.radius ** 2;
+  }
+}
+
+export class Printable {
+  print!: () => void;
+}
+export class ShapePrintableImpl {
+  print() {
+    console.log(this.area());
+  }
+}
+
+// Generated code, this will go in a different file
+export interface Circle extends Shape {}
+export interface CircleShapeImpl extends Circle {}
+export interface ShapePrintableImpl extends Shape, Printable {}
+export namespace ShapePrintableImpl {
+  export function use(f: () => void): void;
+}
+export namespace CircleShapeImpl {
+  export function use(f: () => void): void;
+}
+
+export interface Shape extends Printable {}
+
+CircleShapeImpl.use = function (f) {
+  Circle.prototype.area = CircleShapeImpl.prototype.area;
+  f();
+  // @ts-ignore ["we bend it to our will"](https://twitter.com/techsavvytravvy/status/1707418798838423679)
+  delete Circle.prototype.area;
+};
+
+ShapePrintableImpl.use = function (f) {
+  Circle.prototype.print = ShapePrintableImpl.prototype.print;
+  f();
+  // @ts-ignore ["we bend it to our will"](https://twitter.com/techsavvytravvy/status/1707418798838423679)
+  delete Circle.prototype.print;
+};
+
+// Generated code end
+
+CircleShapeImpl.use(() => {
+  ShapePrintableImpl.use(() => {
+    const circle = new Circle();
+    circle.radius = 10;
+    circle.print();
+  });
+});
+```
+> This is valid typescript code and you can run it with type safety and all the intellisense you would expect from TypeScript.
+
 I dont know if this is the best way to implement traits in TypeScript. I am open for suggestions.
