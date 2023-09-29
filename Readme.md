@@ -54,7 +54,20 @@ export class CircleShapeImpl {
 }
 ```
 
-The impl decorator can take in multiple traits:
+The following example shows how to use the `CircleShapeImpl` class to print a circle to the console:
+
+```typescript
+CircleShapeImpl.use(() => {
+  ShapePrintableImpl.use(() => {
+    const circle = new Circle();
+    circle.radius = 10;
+    circle.print();
+  });
+});
+```
+we could maybe generate this code as well ¯\\\_(ツ)\_/¯
+
+The impl decorator can implement multiple traits at once:
 ```typescript
 @impl(Shape, Printable).for(Circle)
 export class CircleShapeImpl {
@@ -69,21 +82,6 @@ export class CircleShapeImpl {
   }
 }
 ```
-
-The following example shows how to use the `CircleShapeImpl` class to print a circle to the console:
-
-```typescript
-CircleShapeImpl.use(() => {
-  ShapePrintableImpl.use(() => {
-    const circle = new Circle();
-    circle.radius = 10;
-    circle.print();
-  });
-});
-```
-
-we could maybe generate this code as well ¯\_(ツ)_/¯
-
 ## **Code gen**
 
 The generated code could look like this:
