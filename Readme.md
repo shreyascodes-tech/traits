@@ -59,7 +59,7 @@ The following example shows how to use the `CircleShapeImpl` class to print a ci
 ```typescript
 CircleShapeImpl.use(() => {
   ShapePrintableImpl.use(() => {
-    const circle = new CircleShapeImpl();
+    const circle = new Circle();
     circle.radius = 10;
     circle.print();
   });
@@ -87,17 +87,17 @@ declare module "./struct.ts" {
 And the generated use functions could look like this:
 
 ```typescript
-CircleShapeImpl.use = function(f) {
+CircleShapeImpl.use = function (f) {
   Circle.prototype.area = CircleShapeImpl.prototype.area;
   f();
   delete Circle.prototype.area;
-}
+};
 
-ShapePrintableImpl.use = function(f) {
-  Shape.prototype.print = ShapePrintableImpl.prototype.print;
+ShapePrintableImpl.use = function (f) {
+  Circle.prototype.print = ShapePrintableImpl.prototype.print;
   f();
-  delete Shape.prototype.print;
-}
+  delete Circle.prototype.print;
+};
 ```
 
 I dont know if this is the best way to implement traits in TypeScript. I am open for suggestions.
