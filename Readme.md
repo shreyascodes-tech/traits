@@ -167,11 +167,15 @@ ShapePrintableImpl.use = function (f) {
 };
 // Generated code end
 
+function printArea(shape: Shape & Printable) {
+  shape.print();
+}
+
 CircleShapeImpl.use(() => {
   ShapePrintableImpl.use(() => {
     const circle = new Circle();
     circle.radius = 10;
-    circle.print();
+    printArea(circle);
   });
 });
 ```
